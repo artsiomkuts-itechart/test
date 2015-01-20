@@ -1,0 +1,16 @@
+{
+  "name": "NextCaller-WebApp",
+  "version": "0.0.1",
+  "description": "Next Caller standalone web application",
+  "main": "js/app.js",
+  "dependencies": {
+    "jquery": "^1.10",
+    "jquery.base64": "git@github.com:carlo/jquery-base64.git",
+    "jQuery-Mask-Plugin": "~1.11.2",
+    "underscore": "latest",
+    "velocity": "latest",
+    "interact": "latest",
+    "iscroll": "git@github.com:cubiq/iscroll.git",
+    "zeroclipboard": "latest"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "NextCaller-WebApp",
+  "version": "0.0.1",
+  "description": "Next Caller standalone web application",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-cssmin": "^0.11.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-sass": "^0.8.1",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-filerev": "^2.1.2",
+    "grunt-shell": "^1.1.1",
+    "grunt-string-replace": "^1.0.0",
+    "grunt-sync": "^0.2.3"
+  },
+  "keywords": [
+    "caller id",
+    "api",
+    "nextcaller",
+    "webapp"
+  ],
+  "author": "Artsiom Kuts <artsiom.kuts@itechart-group.com>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ]
+}
