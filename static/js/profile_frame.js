@@ -642,7 +642,7 @@ ProfileFrame.prototype.bindings = function() {
     if(!ProfileFrame.binded) {
         var isOpened = false;
         ProfileFrame.binded = true;
-        ZeroClipboard.config({ swfPath: '//s3.amazonaws.com/nextcaller-apptest/ZeroClipboard.swf' });
+        ZeroClipboard.config({ swfPath: '{% bucket_name %}static/files/ZeroClipboard.swf' });
         self.$frame.find('svg.reset').on('mouseenter', function() {
             var $this = $(this).find('.reset-path');
             console.log($this);

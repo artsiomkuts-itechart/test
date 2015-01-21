@@ -1,4 +1,4 @@
-$bucket_name = {% bucket_name %};
+$bucket_name: '{% bucket_name %}';
 html, body {
     margin: 0;
     padding: 0;
