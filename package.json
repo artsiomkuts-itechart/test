@@ -18,7 +18,11 @@
     "grunt-filerev": "^2.1.2",
     "grunt-shell": "^1.1.1",
     "grunt-string-replace": "^1.0.0",
-    "grunt-sync": "^0.2.3"
+    "grunt-sync": "^0.2.3",
+    "grunt-usemin": "~3.0.0",
+    "grunt-replace": "~0.8.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-bower-install": "~1.6.0"
   },
   "keywords": [
     "caller id",

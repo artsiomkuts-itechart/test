@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Next Caller Web App</title>
+    <!-- build:css css/webapp.css -->
+    <link rel="text/css" href='{% bucket_name %}static//css/app.css'/>
+    <!-- endbuild -->
+    <link rel="icon" type="image/png" href='{% bucket_name %}static/img/webapp/icon.png'/>
+    <meta content="index, follow" name="robots" />
+    <meta content="GLOBAL" name="distribution" />
+    <meta content="SAFE FOR KIDS" name="rating" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html;charset=UTF-8" http-equiv="content-type"/>
+    <meta name="description" content="First impression means everything; offer your first time callers the white glove treatment by providing the smoothest inbound call experience in the market.">
+</head>
+<body id="id-web-app">
+<div class="nc-webapp-popup-opener">
+        <span class="popup-opener-logo"></span>
+        <h2 class="opener-title">Advanced Caller ID™</h2>
+        <button class="blue-button open-app-button" type="button">Launch App</button>
+        <div class="popup-blocker-error field-error">Please, make sure your browser allows to open pop-up windows or add exception for Next Caller.</div>
+    </div>
+    <div class="nc-webapp-container">
+        <div class="webapp-frame" id="jsSignInFrame">
+            <div class="sing-in-frame-header frame-header">
+                <h2 class="frame-heading">Advanced Caller ID™</h2>
+                <p class="frame-subheading">Enter your company's Next Caller account info</p>
+            </div>
+            <div class="webapp-frame-wrapper">
+                <div>
+                    <form id="jsSignInForm" class="sign-in-form" action="" method="POST" autocomplete="off">
+                            <div class="cont input-group-container">
+                                <div class="label-cont">
+                                    <label class="form-label" for="apiUsernameInput">API Username</label>
+                                </div>
+                                <div class="wrapper">
+                                    <div class="form-input-container">
+                                        <input id="apiUsernameInput" class="form-input" type="text" tabindex=1 name="api_username" value="" data-types="required: 2, username: 1"/>
+                                        <p class="field-error"></p>
+                                    </div>
+                                </div>
+                                <input id="fakeApiUsername" type="text" name="fake_api_username" value="" class="fake-input"/>
+                            </div>
+                            <div class="cont input-group-container">
+                                <div class="label-cont">
+                                    <label class="form-label" for="apiPasswordInput">API Password</label>
+                                </div>
+                                <input id="fakeApiPassword" type="password" name="fake_api_password" value="" class="fake-input"/>
+                                <div class="wrapper">
+                                    <div class="form-input-container">
+                                        <input id="apiPasswordInput" class="form-input" type="password" tabindex=2 name="api_password" value="" data-types="required: 2, password: 1"/>
+                                        <p class="field-error"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cont login-button-container">
+                                <button type="submit" class="blue-button">Login</button>
+                            </div>
+                            <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="cont support-email-cont">
+                <p>Email <a class="simple-link" href="mailto:support@nextcaller.com" target="_blank">support@nextcaller.com</a> for assistance.</p>
+            </div>
+        </div>
+        <div class="webapp-frame" id="jsPhoneIDFrame">
+            <div class="phone-id-frame-header frame-header">
+                <h3 class="normal">Enter a phone number to begin</h3>
+            </div>
+            <div class="webapp-frame-wrapper">
+                <div>
+                    <form id="jsPhoneIDForm" class="main-form" action="" method="POST">
+                        <div class="phone-field">
+                            <div class="cont input-group-container">
+                                <div class="label-cont">
+                                    <label class="form-label" for="phoneInput"></label>
+                                </div>
+                                <div class="wrapper">
+                                    <div class="form-input-container extended-padding">
+                                        <input id="fakePhoneInput" type="text" class="fake-input" name="fake-phone" value="" tabindex=-1/>
+                                        <input id="phoneInput" type="tel" class="form-input wide-left-padding" name="phone" value="" tabindex=1 data-types="required: 2, phone: 1"/>
+                                        <p class="field-error"></p>
+                                        <p class="phone-prefix">+1</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cont login-button-container">
+                                <button type="submit" class="blue-button id-phone-button">Lookup Number</button>
+                                <div class="loader-wrapper invisible">
+                                    <div class="loader"></div>
+                                </div>
+                                <div class="spinner-container invisible">
+                                    <!--[if !IE]><!-->
+                                    <svg class="spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                       <circle class="spinner-path" fill="none" stroke-width="2" stroke-linecap="round" cx="25" cy="25" r="10" stroke-miterlimit="10"></circle>
+                                    </svg>
+                                    <!--<![endif]-->
+                                    <!--[if (lte IE 9)]><image src='{% bucket_name %}static/img/webapp/loading.gif' width="25" height="25" class="fallback-spinner"/><![endif]-->
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                    <div id="profileDataContainerErrors" class="error-container">
+                        <div>
+                            <div class="reset-button-container">
+                                An error occurred during the lookup. You may try to return to the previous menu and change your credentials:
+                                <button class="blue-button change-credentials reset" id="resetButton" type="submit">Change credentials</button>
+                            </div>
+                            <div class="centered">Error text:</div>
+                            <div class="response-error centered"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cont support-email-cont">
+            </div>
+        </div>
+        <div class="webapp-frame" id="jsProfileFrame">
+            <div class="modal-overlay">
+            </div>
+            <div class="webapp-frame-wrapper webapp-profile-frame-wrapper">
+                <div>
+                    <div class="top-menu">
+                        <div class="top-menu-content">
+                            <button class="blue-button" id="newPhoneButton">Try Another Phone</button>
+                            <button class="blue-button reset" id="newCredsButton">Reset Credentials</button>
+                        </div>
+                    </div>
+                    <div class="profile-frame-header frame-header">
+                        <h3 class="normal profile-frame-heading">Advanced Caller ID™</h3>
+{#                        <span class="cogwheel"></span>#}
+                        <span class="reset-image" title="reset credentials">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                version="1.1"
+                                viewBox="0 0 40 30"
+                                id="SvgReset"
+                                class="reset"
+                                xml:space="preserve">
+                                    <defs id="defs9" />
+                                    <style type="text/css" id="style3" />
+                                    <path d="m 7,25 h 10 v 4 H 1 V 1 H 17 V 5 H 7 v 20 z" id="path5" style="fill-rule:evenodd" />
+                                    <path class="reset-path" d="m 30,15 -9,8 V 17 H 11 V 13 H 21 V 7 l 9,8 z" id="path6" style="fill-rule:evenodd" />
+                            </svg>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="profileDataContainer" class="wrapper">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input id="ApiUsername" type="hidden" name="obtained_api_username" value=""/>
+        <input id="ApiPassword" type="hidden" name="obtained_api_password" value=""/>
+        <div class="footer">
+            <p class="footer-text">Powered By <a href={% server_host %}><span class="footer-logo"></span></a></p>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        var getProfileUrl = {% get_profile_url %};
+        var postProfileUrl = {% post_profile_url %};
+        var getPlanUrl = {% get_plan_url %};
+        var localRealm = {% local_realm %};
+        var upgradePlanUrl = {% upgrade_plan_url %};
+        var statesList = ["", "AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NA", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+    </script>
+        <script id="idModalTmpl" type="text/underscore">
+            <div class="modal-overlay-back">
+            </div>
+            <div class="modal">
+                <div class="modal-title">
+                    <p>Copy to clipboard: Ctrl+C, Enter</p>
+                </div>
+                <div class="modal-form">
+                    <form id="jsSignInForm" class="sign-in-form" action="" method="POST" autocomplete="off">
+                        <div class="cont">
+                            <input id="modalText" type="text" value="<%= copy_text %>" class="form-input border-box"/>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="blue-button ok-button">Ok</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </script>
+        <script id="idPhoneBlockTmpl" type="text/underscore">
+            <div class="phone-and-line-container">
+                <div class="phone-input-container hidden invisible">
+                    <input type="tel" name="phone-input" class="phone-input" data-types="required: 2, phone: 1" />
+                    <button class="search-button-async simple-blue-button"><img class="search-image" src='{% bucket_name %}static/img/webapp/search.svg'/></button>
+                    <p class="field-error field-error-left"></p>
+                    <p class="phone-prefix-second">+1</p>
+                </div>
+                <div class="loader-wrapper invisible phone-ajax-async">
+                    <div class="loader"></div>
+                </div>
+                <div class="spinner-container phone-ajax-async invisible">
+                    <!--[if !IE]><!-->
+                        <svg class="spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                           <circle class="spinner-path" fill="none" stroke-width="2" stroke-linecap="round" cx="25" cy="25" r="10" stroke-miterlimit="10"></circle>
+                        </svg>
+                    <!--<![endif]-->                    
+                    <!--[if (lte IE 9)]><image src='{% bucket_name %}static/img/webapp/loading.gif' width="25" height="25" class="fallback-spinner"/><![endif]-->
+                </div>
+                <div class="phone-and-line">
+                    <span class="left line-type"><%= line_type %></span>
+                    <span class="right relative"><p class="phone"><%= phone_number %></p><div class="change-phone-button"><svg version="1.1" class="change-phone-button-image" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><defs><path d="M11,22 C17.0751325,22 22,17.0751325 22,11 C22,4.92486745 17.0751325,0 11,0 C4.92486745,0 0,4.92486745 0,11 C0,17.0751325 4.92486745,22 11,22 Z M6.75735931,15.9497475 L6.05025253,15.2426407 L10.2928932,11 L6.05025253,6.75735931 L6.75735931,6.05025253 L11,10.2928932 L15.2426407,6.05025253 L15.9497475,6.75735931 L11.7071068,11 L15.9497475,15.2426407 L15.2426407,15.9497475 L11,11.7071068 L6.75735931,15.9497475 Z" id="path-1"/></defs><g fill="none" fill-rule="evenodd" id="miu" stroke="none" stroke-width="1"><g id="circle_close_delete_glyph"><use class="color-fill" fill="#00a8e5" fill-rule="evenodd" xlink:href="#path-1"/><use fill="none" xlink:href="#path-1"/></g></g></svg></div></span>
+                </div>
+            </div>
+            <div class="wrapper profile-wrapper-form">
+                <div class="grid-wrapper">
+                    <div class="grid-container">
+                        <div class="demographic-data-container">
+                            <div class="copy-image copy copy-demographic" title="copy this scope of data"></div>
+                            <div class="loader-wrapper invisible absolute-centered">
+                                <div class="loader"></div>
+                            </div>
+                            <div class="spinner-container invisible absolute-centered">
+                                <!--[if !IE]><!-->
+                                    <svg class="spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                       <circle class="spinner-path" fill="none" stroke-width="2" stroke-linecap="round" cx="25" cy="25" r="10" stroke-miterlimit="10"></circle>
+                                    </svg>
+                                <!--<![endif]-->
+                                <!--[if (lte IE 9)]><image src='{% bucket_name %}static/img/webapp/loading.gif' width="25" height="25" class="fallback-spinner"/><![endif]-->
+                            </div>
+                            <div class="demographic-data-container-tag"><span class="relative"><span class="plus"><i class="fa fa-plus"></i></span><span class="minus"><i class="fa fa-minus"></i></span>Demographic Data</span></div>
+                            <div class="demographic-drag-wrapper">
+                                <div class="demographic-content-wrapper">
+                                    <div class="demographic-data-content">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group" data-name="Name" data-delimiter=" ">
+                        <div class="copy-image copy" title="copy this scope of data"></div>
+                        <div class="cont cont-50">
+                            <div class="cont cont-95">
+                                <div class="right hidden">
+                                    <div class="label-cont">
+                                        <label class="form-label"></label>
+                                    </div>
+                                    <input id="middleNameInput" type="text" autocomplete="false" name="middle_name" value="<%= middle_name %>" class="form-input middle-name" tabindex=2/>
+                                </div>
+                                <div>
+                                    <div class="label-cont">
+                                        <label class="form-label" for="firstNameInput">First Name</label>
+                                    </div>
+                                    <div class="form-input-container">
+                                        <input id="firstNameInput" name="first_name" type="text" class="form-input" value="<%= first_name %>" tabindex=1/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cont cont-5 empty-cont">
+                            </div>
+                        </div>
+                        <div class="cont cont-50">
+                            <div class="cont cont-5 empty-cont">
+                            </div>
+                            <div class="cont cont-95">
+                                <div class="label-cont">
+                                    <label class="form-label" for="lastNameInput">Last Name</label>
+                                </div>
+                                <div class="form-input-container">
+                                    <input id="lastNameInput" type="text" name="last_name" class="form-input" value="<%= last_name %>" tabindex=3/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="input-group" data-name="Address" data-delimiter=", ">
+                        <div class="copy-image copy" title="copy this scope of data"></div>
+                        <div class="cont cont-70">
+                            <div class="label-cont">
+                                <label class="form-label" for="addressInput">Primary Address</label>
+                            </div>
+                            <div class="form-input-container">
+                                <input id="addressInput" tabindex=5 type="text" placeholder="Street" name="shipping_address1.line1" value="<%= shipping_address1.line1 %>" class="form-input"/>
+                            </div>
+                        </div>
+                        <div class="cont cont-30">
+                            <div class="label-cont">
+                                <label class="form-label"></label>
+                            </div>
+                            <div class="form-input-container">
+                                <input id="aptSuiteInput" tabindex=6 type="text" placeholder="Apt/Suite" name="shipping_address1.line2" value="<%= shipping_address1.line2 %>" class="form-input"/>
+                            </div>
+                        </div>
+                        <div class="cont cont-70">
+                            <!--[if !IE]> --> <div class="notIE"> <!-- <![endif]-->
+                            <select id="stateInput" name="shipping_address1.state" tabindex=8 class="select-state form-input">
+                                <% _.each(states, function(value) { %>
+                                    <option <% if(shipping_address1.state == value){ %>selected="selected"<% } %> value="<%= value %>">
+                                        <%= value %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                            <label class="select-label" for="selectInput"></label>
+                            <!--[if !IE]> --> </div> <!-- <![endif]-->
+                            <div class="form-input-container-wrapper">
+                                <div class="form-input-container">
+                                    <input id="cityInput" type="text" placeholder="City" tabindex=7 name="shipping_address1.city" value="<%= shipping_address1.city %>" class="form-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cont cont-30">
+
+                            <div class="form-input-container">
+                                <input id="zipInput" type="text" placeholder="Zip Code" tabindex=9 name="shipping_address1.zip_code" value="<%= shipping_address1.zip_code %>" class="form-input"/>
+                                <input id="fakeZipInput" type="text" class="fake-input"/>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="input-group" data-name="Email" data-delimiter=" ">
+                        <% if(has_email) { %>
+                            <div class="copy-image copy" title="copy this scope of data"></div>
+                        <% } %>
+                        <div class="cont">
+                            <% if(has_email) { %>
+                                <div class="label-cont">
+                                    <label class="form-label" for="emailInput">Email</label>
+                                </div>
+                                <div class="form-input-container">
+                                    <input id="emailInput" type="email" name="email" class="form-input" value="<%= email %>" tabindex=10/>
+                                </div>
+                            <% } else { %>
+                                <div class="label-cont">
+                                    <label class="form-label">Email</label>
+                                </div>
+                                <div class="form-input-container">
+                                    <input id="emailInputHidden" type="text" class="form-input readonly" disabled="true" value="***************" tabindex=-1/>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-wrapper-form profile-wrapper-form-after">
+                <div class="cont login-button-container">
+                    <button type="submit" class="blue-button copy-all">Copy All Data</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </script>
+        <script type='text/underscore' id="idDemographicBlockTmpl">
+        <% if(has_demographic) { %>
+            <div class="demographic-data-block" id="demographicDataBlock">
+                <div class="demographic-values">
+                    <% _.each(demographic, function(element) { %>
+                        <% if(element.is_array) { %>
+                            <span class='demographic-span demographic-data-span' data-name="<%= element.key %>"><%= element.key %>:</span>
+                            <div class='demographic-data-array'>
+                                <% _.each(element.value, function(inner_elem, index) { %>
+                                    <% if(_.isObject(inner_elem)) { %>
+                                        <span class='demographic-span demographic-data-array-span-inline'>
+                                            <a class="no-underline social-link" href="<%= inner_elem.url %>" target="_blank">
+                                                <i class="fa fa-<%= inner_elem.type %>">
+                                                </i>
+                                            </a>
+                                        </span>
+                                    <% } else { %>
+                                        <span class='demographic-span demographic-data-array-span-inline'>
+                                            <a class="no-underline relative-link simple-link" href="javascript:;" data-link="<%= inner_elem.split('#: ')[1] %>"><%= inner_elem.split('#: ')[0] %></a>
+                                        </span>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                        <% } else { %>
+                            <span class='demographic-span demographic-data-span' data-name="<%= element.key %>"><%= element.value %></span>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="cont update-plan-button-container">
+                <div class="demographic-data-heading">Demographic data hidden</div>
+                <button type="submit" class="blue-button update-plan" id="update-your-plan"><span class="white-star"></span>Upgrade Your Plan</button>
+                <div class="loader-wrapper invisible">
+                    <div class="loader"></div>
+                </div>
+                <div class="spinner-container invisible">
+                    <!--[if !IE]><!-->
+                        <svg class="spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                           <circle class="spinner-path" fill="none" stroke-width="2" stroke-linecap="round" cx="25" cy="25" r="10" stroke-miterlimit="10"></circle>
+                        </svg>
+                    <!--<![endif]-->
+                    <!--[if (lte IE 9)]><image src='{% bucket_name %}static/img/webapp/loading.gif' width="25" height="25" class="fallback-spinner"/><![endif]-->
+                </div>
+            </div>
+        <% } %>
+        </script>
+        <!-- build:js js/webapp.js -->
+        <script type="text/javascript" src="{% bucket_name %}static/lib/jquery/dist/jquery.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/jquery.base64/jquery.base64.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/jQuery-Mask-Plugin/dist/jquery.mask.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/underscore/underscore-min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/velocity/velocity.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/velocity/velocity.ui.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/interact/interact.min.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/iscroll/build/iscroll.js"/>
+        <script type="text/javascript" src="{% bucket_name %}static/lib/zeroclipboard/dist/ZeroClipboard.min.js"/>
+        <!-- endbuild -->
+</body>
+</html>

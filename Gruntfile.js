@@ -14,7 +14,8 @@ module.exports = function(grunt) {
         useminPrepare: {
             html: '<%= index_html %>',
             options: {
-                dest: '<%= compiled_static %>/'
+                dest: '<%= compiled_static %>/',
+                staging: 'tmp'
             }
         },
         sync: {
@@ -48,9 +49,9 @@ module.exports = function(grunt) {
             lib: {
                 files: [
                     {
-                        cwd: '<%= static_dir %>/dependencies',
+                        cwd: '<%= static_dir %>/lib',
                         src: '**/*.js',
-                        dest: '<%= compiled_static %>/scss'
+                        dest: '<%= compiled_static %>/lib'
                     }
                 ]
             }
@@ -59,7 +60,7 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= static_dir %>',
+                    cwd: '<%= static_dir %>/scss',
                     src: ['**/*.scss'],
                     dest: '<%= compiled_static %>/css/',
                     ext: '.css'
@@ -89,17 +90,26 @@ module.exports = function(grunt) {
                 },
                 options: {
                     replacements: [{
-                        pattern: /\{% get-profile-url %\}/ig,
+                        pattern: /\{% get_profile_url %\}/ig,
                         replacement: '<%= get_profile_url %>'
                     }, {
-                        pattern: /\{% post-profile-url %\}/ig,
+                        pattern: /\{% post_profile_url %\}/ig,
                         replacement: '<%= post_profile_url %>'
                     } ,{
-                        pattern: /\{% get-plan-url %\}/ig,
+                        pattern: /\{% get_plan_url %\}/ig,
                         replacement: '<%= get_plan_url %>'
                     }, {
-                        pattern: /\{% upgrade-plan-url %\}/ig,
+                        pattern: /\{% upgrade_plan_url %\}/ig,
                         replacement: '<%= upgrade_plan_url %>'
+                    }, {
+                        pattern: /\{% server_host %\}/ig,
+                        replacement: '<%= server_host %>'
+                    }, {
+                        pattern: /\{% local_realm %\}/ig,
+                        replacement: '<%= local_realm %>'
+                    }, {
+                        pattern: /\{% bucket_name %\}/ig,
+                        replacement: '<%= bucket_name %>'
                     }]
                 }
             }
@@ -107,46 +117,70 @@ module.exports = function(grunt) {
     });
 
     var version = grunt.option('version') || 'v2';
-    var mode = grunt.config('mode') || 'prod';
+    var mode = grunt.config('mode') || 'local';
+    var local_realm = grunt.config('realm') || 'localhost:8000';
+    var path = require('path');
 
     var js_config = {
         devel: {
-            "get-profile-url": "http://api.devel.nextcaller.com/<%= version %>/records/",
-            "get-plan-url": "http://api.devel.nextcaller.com/<%= version %>/plan/",
-            "post-profile-url": "http://api.devel.nextcaller.com/<%= version %>/users/",
-            "upgrade-plan-url": "http://dev.devel.nextcaller.com/plan/change/"
+            "get-profile-url": "http://api.devel.nextcaller.com/" + version + "/records/",
+            "get-plan-url": "http://api.devel.nextcaller.com/" + version + "/plan/",
+            "post-profile-url": "http://api.devel.nextcaller.com/" + version + "/users/",
+            "upgrade-plan-url": "http://dev.devel.nextcaller.com/plan/change/",
+            "server-host": "http://devel.nextcaller.com",
+            "bucket-name": "azaza.com/",
+            "local_realm": false
         },
         qa: {
-            "get-profile-url": "http://api.demo.nextcaller.com/<%= version %>/records/",
-            "get-plan-url": "http://api.demo.nextcaller.com/<%= version %>/plan/",
-            "post-profile-url": "http://api.demo.nextcaller.com/<%= version %>/users/",
-            "upgrade-plan-url": "http://dev.demo.nextcaller.com/plan/change/"
+            "get-profile-url": "http://api.demo.nextcaller.com/" + version + "/records/",
+            "get-plan-url": "http://api.demo.nextcaller.com/" + version + "/plan/",
+            "post-profile-url": "http://api.demo.nextcaller.com/" + version + "/users/",
+            "upgrade-plan-url": "http://dev.demo.nextcaller.com/plan/change/",
+            "server-host": "http://demo.nextcaller.com",
+            "bucket-name": "azaza.com/",
+            "local_realm": false
         },
         prod: {
-            "get-profile-url": "https://api.nextcaller.com/<%= version %>/records/",
-            "get-plan-url": "https://api.nextcaller.com/<%= version %>/plan/",
-            "post-profile-url": "https://api.nextcaller.com/<%= version %>/users/",
-            "upgrade-plan-url": "https://dev.nextcaller.com/plan/change/"
+            "get-profile-url": "https://api.nextcaller.com/" + version + "/records/",
+            "get-plan-url": "https://api.nextcaller.com/" + version + "/plan/",
+            "post-profile-url": "https://api.nextcaller.com/" + version + "/users/",
+            "upgrade-plan-url": "https://dev.nextcaller.com/plan/change/",
+            "server-host": "https://nextcaller.com",
+            "bucket-name": "azaza.com/",
+            "local-realm": false
+        },
+        local: {
+            "get-profile-url": "http://" + local_realm + "/api/" + version + "/records/",
+            "get-plan-url": "http://" + local_realm + "/api/" + version + "/plan/",
+            "post-profile-url": "http://" + local_realm + "/api/" + version + "/users/",
+            "upgrade-plan-url": "http://" + local_realm + "/dev/plan/change/",
+            "server-host": "http://" + local_realm,
+            "bucket-name": path + "/static/",
+            "local-realm": true
+        }
+    };
+
+    for(var variable in js_config[mode]) {
+        if(js_config[mode].hasOwnProperty(variable)) {
+            grunt.config.set(variable.replace(/-/g,'_'), js_config[mode][variable])
         }
     }
-
-    grunt.config.set('version', version);
-    grunt.config.set('mode', mode);
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-filerev');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-shell');
-    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sync');
 
     grunt.registerTask('pre_build', [
         'shell:clean_static', //grunt-sync
+        'sync',
         'sass',
         'useminPrepare',
         'concat:generated',
@@ -158,8 +192,8 @@ module.exports = function(grunt) {
         'filerev'
     ]);
     grunt.registerTask('build', [
-        'usemin',
-        'replace'
+        'usemin'
+//        'replace'
     ]);
     grunt.registerTask('develop', [
         'sass',
