@@ -92,41 +92,6 @@ module.exports = function(grunt) {
                 src: ['<%= compiled_static %>/js/*.js', '<%= compiled_static %>/css/*.css']
             }
         },
-        "replace": {
-            local: {
-                src: ['build/**/*.html', 'build/**/*.scss', 'build/**/*.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /\{% bucket_name %\}/ig,
-                    to: '<%= grunt.config.get(bucket-name) %>'
-                }]
-            }, remote: {
-                src: ['build/**/*.html', 'build/**/*.css', 'build/**/*.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /\{% get_profile_url %\}/ig,
-                    to: '<%= grunt.config.get(get-profile-url) %>'
-                }, {
-                    from: /\{% post_profile_url %\}/ig,
-                    to: '<%= grunt.config.get(post-profile-url) %>'
-                } ,{
-                    from: /\{% get_plan_url %\}/ig,
-                    to: '<%= grunt.config.get(get-plan-url) %>'
-                }, {
-                    from: /\{% upgrade_plan_url %\}/ig,
-                    to: '<%= grunt.config.get(upgrade-plan-url) %>'
-                }, {
-                    from: /\{% server_host %\}/ig,
-                    to: '<%= grunt.config.get(server-host) %>'
-                }, {
-                    from: /\{% local_realm %\}/ig,
-                    to: '<%= grunt.config.get(local-realm) %>'
-                }, {
-                    from: new RegExp('\.\.\/\.\.\/', 'ig'),
-                    to: '<% grunt.config.get(bucket-name) %>'
-                }]
-            }
-        },
         config: {
             devel: {
                 options: {
@@ -180,6 +145,41 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+        "replace": {
+            local: {
+                src: ['build/**/*.html', 'build/**/*.scss', 'build/**/*.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /\{% bucket_name %\}/ig,
+                    to: '<%= grunt.config.get("bucket-name") %>'
+                }]
+            }, remote: {
+                src: ['build/**/*.html', 'build/**/*.css', 'build/**/*.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /\{% get_profile_url %\}/ig,
+                    to: '<%= grunt.config.get("get-profile-url") %>'
+                }, {
+                    from: /\{% post_profile_url %\}/ig,
+                    to: '<%= grunt.config.get("post-profile-url") %>'
+                } ,{
+                    from: /\{% get_plan_url %\}/ig,
+                    to: '<%= grunt.config.get("get-plan-url") %>'
+                }, {
+                    from: /\{% upgrade_plan_url %\}/ig,
+                    to: '<%= grunt.config.get("upgrade-plan-url") %>'
+                }, {
+                    from: /\{% server_host %\}/ig,
+                    to: '<%= grunt.config.get("server-host") %>'
+                }, {
+                    from: /\{% local_realm %\}/ig,
+                    to: '<%= grunt.config.get("local-realm") %>'
+                }, {
+                    from: new RegExp('\.\.\/\.\.\/', 'ig'),
+                    to: '<% grunt.config.get("bucket-name") %>'
+                }]
+            }
         }
     });
 
@@ -197,24 +197,32 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-filerev');
+    grunt.loadNpmTasks('grunt-config');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sync');
 
+    grunt.registerTask('test_set_vars', [
+        'config:local',
+        'replace:local'
+    ]);
+
     grunt.registerTask('pre_build', [
         'shell:clean_static',
         'sync',
         'config:local',
         'replace:local',
-        'sass',
+        'sass'
+    ]
+    );
+    grunt.registerTask('prepare', [
         'useminPrepare',
         'concat:generated',
         'cssmin:generated',
         'uglify:generated'
-    ]
-    );
+    ]);
     grunt.registerTask('versioning', [
         'filerev'
     ]);

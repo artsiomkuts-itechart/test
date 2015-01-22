@@ -21,7 +21,8 @@
     "grunt-shell": "^1.1.1",
     "grunt-sync": "^0.2.3",
     "grunt-text-replace": "^0.4.0",
-    "grunt-usemin": "~3.0.0"
+    "grunt-usemin": "~3.0.0",
+    "grunt-config": "~0.2.2"
   },
   "keywords": [
     "caller id",
